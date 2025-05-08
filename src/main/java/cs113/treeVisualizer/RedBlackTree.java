@@ -112,8 +112,41 @@ public class RedBlackTree<E extends Comparable<E>> {
         Node<E> unc = node.parent.isLeftChild() ? node.parent.parent.right : node.parent.parent.left;
 
         if (unc.color == Color.RED){
+            node.parent.parent.color = Color.RED;
             unc.color = Color.BLACK;
             node.parent.color = Color.BLACK;
+            fixInsert(node.parent.parent);
+
+        } else {
+
+            boolean left = node.isLeftChild();
+            boolean parentLeft = node.parent.isLeftChild();
+
+            if (left != parentLeft) {
+                if(parentLeft){
+                    leftRotate(node.parent);
+                    node = node.left;
+
+                } else {
+                    rightRotate(node.parent);
+                    node = node.right;
+                }
+                left = !left;
+            }
+
+
+            node.parent.parent.color = Color.RED;
+            node.parent.color = Color.BLACK;
+
+            //if (left == parentLeft) {
+                if(left) {
+                    rightRotate(node.parent.parent);
+                } else {
+                    leftRotate(node.parent.parent);
+                }
+
+
+
         }
 
     }
